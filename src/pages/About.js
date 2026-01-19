@@ -1,5 +1,5 @@
 import Layout from "../components/Layout";
-import { Users, Zap, Globe, Award, TrendingUp, MonitorPlay } from "lucide-react";
+import { Users, Globe, Award, MonitorPlay } from "lucide-react";
 import Button from "../components/ui/Button";
 import { Link } from "react-router-dom";
 

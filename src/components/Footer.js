@@ -1,4 +1,4 @@
-import { Instagram, Mail, Shield, MessageSquare, Heart } from "lucide-react";
+import { Instagram, Shield, MessageSquare, Heart } from "lucide-react";
 import Logo from "./ui/Logo";
 import { Link } from "react-router-dom";
 

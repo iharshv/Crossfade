@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Layout from "../components/Layout";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
@@ -14,14 +14,7 @@ export default function EditorDashboard() {
     const [loading, setLoading] = useState(true);
     const [chatProjectId, setChatProjectId] = useState(null);
 
-    useEffect(() => {
-        if (user) {
-            fetchAvailableProjects();
-            fetchMyProjects();
-        }
-    }, [user]);
-
-    const fetchAvailableProjects = async () => {
+    const fetchAvailableProjects = useCallback(async () => {
         try {
             const res = await fetch(`${API_URL}/projects`);
             const data = await res.json();
@@ -31,9 +24,9 @@ export default function EditorDashboard() {
         } catch (error) {
             console.error("Error fetching available:", error);
         }
-    };
+    }, [user?._id]);
 
-    const fetchMyProjects = async () => {
+    const fetchMyProjects = useCallback(async () => {
         try {
             const res = await fetch(`${API_URL}/projects/assigned/${user._id}`);
             const data = await res.json();
@@ -42,7 +35,14 @@ export default function EditorDashboard() {
         } catch (error) {
             console.error("Error fetching my projects:", error);
         }
-    };
+    }, [user?._id]);
+
+    useEffect(() => {
+        if (user) {
+            fetchAvailableProjects();
+            fetchMyProjects();
+        }
+    }, [user, fetchAvailableProjects, fetchMyProjects]);
 
     const handleApply = async (projectId) => {
         try {

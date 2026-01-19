@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { io } from "socket.io-client";
 import Card from "./ui/Card";
@@ -18,7 +18,7 @@ export default function Chat({ projectId, onClose }) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    const fetchMessages = async () => {
+    const fetchMessages = useCallback(async () => {
         try {
             const res = await fetch(`${API_URL}/chat/${projectId}?userId=${user._id}`);
             if (res.ok) {
@@ -29,7 +29,7 @@ export default function Chat({ projectId, onClose }) {
         } catch (error) {
             console.error("Error fetching messages:", error);
         }
-    };
+    }, [projectId, user._id]);
 
     useEffect(() => {
         fetchMessages();
@@ -47,7 +47,7 @@ export default function Chat({ projectId, onClose }) {
         return () => {
             socket.off("receive_message");
         };
-    }, [projectId, user]);
+    }, [projectId, fetchMessages]);
 
     useEffect(() => {
         scrollToBottom();

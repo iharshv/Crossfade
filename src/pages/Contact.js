@@ -1,7 +1,7 @@
 import Layout from "../components/Layout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import { Mail, MapPin, Phone, MessageCircle, HelpCircle } from "lucide-react";
+import { Mail, MapPin, HelpCircle, MessageCircle } from "lucide-react";
 
 export default function Contact() {
     return (

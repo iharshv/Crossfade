@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Layout from "../components/Layout";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
@@ -15,11 +15,7 @@ export default function ClientDashboard() {
     const [loading, setLoading] = useState(true);
     const [chatProjectId, setChatProjectId] = useState(null);
 
-    useEffect(() => {
-        if (user) fetchProjects();
-    }, [user]);
-
-    const fetchProjects = async () => {
+    const fetchProjects = useCallback(async () => {
         try {
             const res = await fetch(`${API_URL}/projects/my-projects/${user._id}`);
             const data = await res.json();
@@ -28,7 +24,11 @@ export default function ClientDashboard() {
         } catch (error) {
             console.error("Error fetching projects:", error);
         }
-    };
+    }, [user?._id]);
+
+    useEffect(() => {
+        if (user) fetchProjects();
+    }, [user, fetchProjects]);
 
     const handlePostProject = async (e) => {
         e.preventDefault();

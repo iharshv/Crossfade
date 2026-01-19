@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import Layout from "../components/Layout";
 import Card from "../components/ui/Card";
@@ -25,34 +25,26 @@ export default function AdminDashboard() {
     const [userForm, setUserForm] = useState({ name: "", email: "", password: "", role: "client", gender: "", dob: "" });
     const [projectForm, setProjectForm] = useState({ title: "", description: "", budget: "", deadline: "", clientId: "" });
 
-    useEffect(() => {
-        if (user && user.role === 'admin') {
-            fetchStats();
-            fetchUsers();
-            fetchProjects();
-        }
-    }, [user]);
-
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const res = await fetch(`${API_URL}/admin/functions`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ adminId: user._id }),
+                body: JSON.stringify({ adminId: user?._id }),
             });
             const data = await res.json();
             setStats(data);
         } catch (error) {
             console.error("Error fetching stats:", error);
         }
-    };
+    }, [user?._id]);
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         try {
             const res = await fetch(`${API_URL}/admin/users`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ adminId: user._id }),
+                body: JSON.stringify({ adminId: user?._id }),
             });
             const data = await res.json();
             setUsers(data);
@@ -60,21 +52,29 @@ export default function AdminDashboard() {
         } catch (error) {
             console.error("Error fetching users:", error);
         }
-    };
+    }, [user?._id]);
 
-    const fetchProjects = async () => {
+    const fetchProjects = useCallback(async () => {
         try {
             const res = await fetch(`${API_URL}/admin/projects`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ adminId: user._id }),
+                body: JSON.stringify({ adminId: user?._id }),
             });
             const data = await res.json();
             setProjects(data);
         } catch (error) {
             console.error("Error fetching projects:", error);
         }
-    };
+    }, [user?._id]);
+
+    useEffect(() => {
+        if (user && user.role === 'admin') {
+            fetchStats();
+            fetchUsers();
+            fetchProjects();
+        }
+    }, [user, fetchStats, fetchUsers, fetchProjects]);
 
     const handleCreateUser = async (e) => {
         e.preventDefault();
