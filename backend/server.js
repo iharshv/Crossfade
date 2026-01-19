@@ -28,9 +28,14 @@ app.use(cors({
 app.use(express.json());
 
 // database connection
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+mongoose.connect(MONGODB_URI, {
+  serverSelectionTimeoutMS: 5000 // Timeout after 5 seconds if MongoDB is unreachable
+})
+  .then(() => console.log("MongoDB Connected Successfully"))
+  .catch(err => {
+    console.error("CRITICAL: MongoDB Connection Failed!");
+    console.error(err);
+  });
 
 // routes
 app.use("/projects", projectRoutes);
