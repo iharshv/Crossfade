@@ -34,6 +34,11 @@ export default function Navbar() {
                     Find Jobs
                 </Link>
             )}
+            {user && user.role === 'admin' && (
+                <Link to="/admin-dashboard" className="text-gray-400 hover:text-white transition-colors text-sm font-medium" onClick={() => setIsOpen(false)}>
+                    Admin Dashboard
+                </Link>
+            )}
         </>
     );
 
