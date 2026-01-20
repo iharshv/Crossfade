@@ -27,6 +27,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Log all incoming requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
 // database connection
 mongoose.connect(MONGODB_URI, {
   serverSelectionTimeoutMS: 5000 // Timeout after 5 seconds if MongoDB is unreachable
