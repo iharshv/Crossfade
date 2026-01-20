@@ -10,7 +10,8 @@ export default function ScrollToTop() {
             setTimeout(() => {
                 const element = document.getElementById(hash.substring(1));
                 if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
+                    // Instant scroll on load, let SmoothScroll handle clicks
+                    element.scrollIntoView({ behavior: "auto" });
                 }
             }, 100);
         } else {

@@ -21,8 +21,31 @@ export default function SmoothScroll() {
 
         requestAnimationFrame(raf);
 
+        // Handle Anchor Links
+        const handleClick = (e) => {
+            const target = e.target.closest("a");
+            if (!target) return;
+
+            const href = target.getAttribute("href");
+            if (!href) return;
+
+            // Check if it's an anchor link on the same page
+            if (href.startsWith("#") || (href.startsWith("/") && href.includes("#") && window.location.pathname === href.split("#")[0])) {
+                const elementId = href.split("#")[1];
+                const element = document.getElementById(elementId);
+
+                if (element) {
+                    e.preventDefault();
+                    lenis.scrollTo(element);
+                }
+            }
+        };
+
+        document.addEventListener("click", handleClick);
+
         return () => {
             lenis.destroy();
+            document.removeEventListener("click", handleClick);
         };
     }, []);
 
