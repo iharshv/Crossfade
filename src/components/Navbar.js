@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import Logo from "./ui/Logo";
 import Button from "./ui/Button";
@@ -89,39 +90,47 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Menu Drawer */}
-            {isOpen && !isAuthPage && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-[#030014]/95 border-b border-white/5 py-8 px-6 backdrop-blur-xl animate-in fade-in slide-in-from-top-4 duration-300">
-                    <div className="flex flex-col gap-6">
-                        <NavLinks />
+            <AnimatePresence>
+                {isOpen && !isAuthPage && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                        className="md:hidden absolute top-full left-0 w-full bg-[#030014]/95 border-b border-white/5 overflow-hidden backdrop-blur-xl"
+                    >
+                        <div className="py-8 px-6 flex flex-col gap-6">
+                            <NavLinks />
 
-                        <div className="h-[1px] w-full bg-white/5" />
+                            <div className="h-[1px] w-full bg-white/5" />
 
-                        {user ? (
-                            <Link to="/profile" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10" onClick={() => setIsOpen(false)}>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-primary flex items-center justify-center font-bold">
-                                        {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                            {user ? (
+                                <Link to="/profile" className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10" onClick={() => setIsOpen(false)}>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-primary flex items-center justify-center font-bold">
+                                            {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                                        </div>
+                                        <div>
+                                            <p className="text-white font-bold">{user.name}</p>
+                                            <p className="text-xs text-gray-500">{user.role}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p className="text-white font-bold">{user.name}</p>
-                                        <p className="text-xs text-gray-500">{user.role}</p>
-                                    </div>
+                                    <ChevronRight className="text-gray-600" size={20} />
+                                </Link>
+                            ) : (
+                                <div className="flex flex-col gap-4">
+                                    <Link to="/login" className="w-full" onClick={() => setIsOpen(false)}>
+                                        <Button variant="outline" className="w-full justify-center border-white/10">Log In</Button>
+                                    </Link>
+                                    <Link to="/register" className="w-full" onClick={() => setIsOpen(false)}>
+                                        <Button variant="primary" className="w-full justify-center bg-gradient-to-r from-primary to-secondary">Start Creating</Button>
+                                    </Link>
                                 </div>
-                                <ChevronRight className="text-gray-600" size={20} />
-                            </Link>
-                        ) : (
-                            <div className="flex flex-col gap-4">
-                                <Link to="/login" className="w-full" onClick={() => setIsOpen(false)}>
-                                    <Button variant="outline" className="w-full justify-center border-white/10">Log In</Button>
-                                </Link>
-                                <Link to="/register" className="w-full" onClick={() => setIsOpen(false)}>
-                                    <Button variant="primary" className="w-full justify-center bg-gradient-to-r from-primary to-secondary">Start Creating</Button>
-                                </Link>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
+                            )}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </nav>
     );
 }

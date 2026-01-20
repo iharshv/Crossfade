@@ -14,6 +14,7 @@ export default function Button({ children, onClick, variant = "primary", classNa
         <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
             onClick={onClick}
             className={`${baseStyles} ${variants[variant]} ${className}`}
             {...props}
