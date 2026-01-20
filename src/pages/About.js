@@ -82,9 +82,8 @@ export default function About() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                         {[
-                            { name: "Harsh", role: "Founder", ig: "@iharshv", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" },
-                            { name: "Name", role: "Co-Founder", ig: "@handle", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop" },
-                            { name: "Name", role: "Advisor", ig: "@handle", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop" }
+                            { name: "Satvesh Sarungale", role: "Founder", ig: "@Satvesh_Sarungale", img: "/assets/team/t1.jpg" },
+                            { name: "Sunil Rathod", role: "Co-Founder", ig: "@_sunill02_", img: "/assets/team/t2.jpg" }
                         ].map((member, idx) => (
                             <motion.div
                                 key={idx}
