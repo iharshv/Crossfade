@@ -86,8 +86,13 @@ export default function About() {
                             { name: "Name", role: "Co-Founder", ig: "@handle", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop" },
                             { name: "Name", role: "Advisor", ig: "@handle", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop" }
                         ].map((member, idx) => (
-                            <div
+                            <motion.div
                                 key={idx}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.2 }}
+                                whileHover={{ y: -10 }}
                                 className="group relative w-full max-w-[320px] bg-black/40 border border-white/5 rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(112,0,255,0.15)]"
                             >
                                 {/* Background Glow */}
@@ -120,7 +125,7 @@ export default function About() {
                                         <span>{member.ig}</span>
                                     </a>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
