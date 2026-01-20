@@ -14,16 +14,24 @@ const CLIENT_URL = process.env.CLIENT_URL || "*";
 
 const app = express();
 const server = http.createServer(app);
+
+// middleware
+const allowedOrigins = [CLIENT_URL];
+if (CLIENT_URL.endsWith("/")) {
+  allowedOrigins.push(CLIENT_URL.slice(0, -1));
+} else if (CLIENT_URL !== "*") {
+  allowedOrigins.push(CLIENT_URL + "/");
+}
+
 const io = new Server(server, {
   cors: {
-    origin: CLIENT_URL,
+    origin: allowedOrigins,
     methods: ["GET", "POST"]
   }
 });
 
-// middleware
 app.use(cors({
-  origin: CLIENT_URL
+  origin: allowedOrigins
 }));
 app.use(express.json());
 
