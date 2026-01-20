@@ -83,7 +83,8 @@ export default function About() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                         {[
                             { name: "Satvesh Sarungale", role: "Founder", ig: "@Satvesh_Sarungale", img: "/assets/team/t1.jpg" },
-                            { name: "Sunil Rathod", role: "Co-Founder", ig: "@_sunill02_", img: "/assets/team/t2.jpg" }
+                            { name: "Sunil Rathod", role: "Co-Founder", ig: "@_sunill02_", img: "/assets/team/t2.jpg" },
+                            { name: "Harsh Vishwakarma", role: "Administrator", ig: "@iharsh.v", img: "/assets/team/t3.jpg" }
                         ].map((member, idx) => (
                             <motion.div
                                 key={idx}
