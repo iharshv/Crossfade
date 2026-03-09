@@ -19,6 +19,9 @@ const projectSchema = new mongoose.Schema({
     enum: ['Pending', 'Done'],
     default: "Pending"
   },
+  paymentConfirmedByEditor: { type: Boolean, default: false },
+  isDisputed: { type: Boolean, default: false },
+  disputeReason: String,
   createdAt: { type: Date, default: Date.now }
 });
 

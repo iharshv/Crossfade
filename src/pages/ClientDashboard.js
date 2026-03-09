@@ -62,11 +62,12 @@ export default function ClientDashboard() {
     };
 
     const handleMarkPaid = async (projectId) => {
+        if (!window.confirm("Confirming you have sent the payment? The editor will need to verify this.")) return;
         try {
             await fetch(`${API_URL}/projects/${projectId}/status`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "Paid", paymentStatus: "Done" }),
+                body: JSON.stringify({ paymentStatus: "Done" }),
             });
             fetchProjects();
         } catch (error) {
@@ -225,13 +226,19 @@ export default function ClientDashboard() {
                                                             </div>
                                                             <div className="flex items-center">
                                                                 {project.status === 'Completed' && (
-                                                                    <Button
-                                                                        onClick={() => handleMarkPaid(project._id)}
-                                                                        className="bg-green-500/10 text-green-400 hover:bg-green-500/20 border-green-500/50"
-                                                                        variant="outline"
-                                                                    >
-                                                                        Mark Payment Done
-                                                                    </Button>
+                                                                    <>
+                                                                        {project.paymentStatus === 'Done' ? (
+                                                                            <span className="text-yellow-500 text-sm italic">Waiting for Editor to confirm...</span>
+                                                                        ) : (
+                                                                            <Button
+                                                                                onClick={() => handleMarkPaid(project._id)}
+                                                                                className="bg-green-500/10 text-green-400 hover:bg-green-500/20 border-green-500/50"
+                                                                                variant="outline"
+                                                                            >
+                                                                                Mark Payment Done
+                                                                            </Button>
+                                                                        )}
+                                                                    </>
                                                                 )}
                                                                 {project.status === 'Paid' && (
                                                                     <span className="text-green-500 font-bold text-sm border border-green-500/20 px-3 py-1 rounded-full">Payment Complete</span>

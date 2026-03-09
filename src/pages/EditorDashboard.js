@@ -59,17 +59,33 @@ export default function EditorDashboard() {
         }
     };
 
-    const handleFinish = async (projectId) => {
-        if (!window.confirm("Mark project as completed?")) return;
+    const handleConfirmPayment = async (projectId) => {
         try {
-            await fetch(`${API_URL}/projects/${projectId}/status`, {
+            await fetch(`${API_URL}/projects/${projectId}/confirm-payment`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "Completed" }),
             });
             fetchMyProjects();
+            alert("Payment confirmed!");
         } catch (error) {
-            alert("Error updating status");
+            alert("Error confirming payment");
+        }
+    };
+
+    const handleReport = async (projectId) => {
+        const reason = window.prompt("Reason for reporting (e.g. Work finished but no payment marked):");
+        if (!reason) return;
+
+        try {
+            await fetch(`${API_URL}/projects/${projectId}/report`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ reason }),
+            });
+            fetchMyProjects();
+            alert("Report submitted to Admin.");
+        } catch (error) {
+            alert("Error reporting project");
         }
     };
 
@@ -158,22 +174,52 @@ export default function EditorDashboard() {
                                             <h2 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">Completed Projects</h2>
                                             <div className="grid gap-6">
                                                 {pastWork.map((project) => (
-                                                    <Card key={project._id} className="p-6 border-white/5 bg-black/10 opacity-70">
-                                                        <div className="flex justify-between items-center">
+                                                    <Card key={project._id} className="p-6 border-white/5 bg-black/10">
+                                                        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                                                             <div>
                                                                 <h3 className="text-xl font-bold text-gray-300">{project.title}</h3>
                                                                 <p className="text-sm text-gray-500">Client: {project.clientId?.name}</p>
                                                             </div>
-                                                            <div className="flex items-center gap-4">
-                                                                <span className="text-green-500 font-mono">${project.budget}</span>
-                                                                {project.status === 'Completed' && (
-                                                                    <div className="px-3 py-1 rounded border border-yellow-500/30 text-yellow-500 text-sm">
-                                                                        Pending Payment
+                                                            <div className="flex flex-wrap items-center gap-3">
+                                                                <span className="text-green-500 font-mono pr-4">${project.budget}</span>
+
+                                                                {project.isDisputed && (
+                                                                    <div className="px-3 py-1 rounded bg-red-500/10 border border-red-500/30 text-red-500 text-sm font-bold">
+                                                                        ⚠️ Disputed
                                                                     </div>
                                                                 )}
+
+                                                                {project.status === 'Completed' && (
+                                                                    <>
+                                                                        {project.paymentStatus === 'Done' ? (
+                                                                            <Button
+                                                                                onClick={() => handleConfirmPayment(project._id)}
+                                                                                className="bg-green-600 hover:bg-green-500 text-white text-sm"
+                                                                            >
+                                                                                Confirm Payment Recieved
+                                                                            </Button>
+                                                                        ) : (
+                                                                            <div className="flex gap-2">
+                                                                                <div className="px-3 py-1 rounded border border-yellow-500/30 text-yellow-500 text-sm">
+                                                                                    Waiting for Client to Pay
+                                                                                </div>
+                                                                                {!project.isDisputed && (
+                                                                                    <Button
+                                                                                        onClick={() => handleReport(project._id)}
+                                                                                        variant="outline"
+                                                                                        className="text-xs border-red-500/30 text-red-400 hover:bg-red-500/10"
+                                                                                    >
+                                                                                        Report Issue
+                                                                                    </Button>
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </>
+                                                                )}
+
                                                                 {project.status === 'Paid' && (
-                                                                    <div className="px-3 py-1 rounded border border-green-500/30 text-green-500 text-sm font-bold">
-                                                                        Paid
+                                                                    <div className="px-3 py-1 rounded bg-green-500/10 border border-green-500/30 text-green-500 text-sm font-bold">
+                                                                        ✅ Payment Confirmed
                                                                     </div>
                                                                 )}
                                                             </div>

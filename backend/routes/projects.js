@@ -103,4 +103,33 @@ router.put("/:id/status", async (req, res) => {
   }
 });
 
+// confirm payment (editor)
+router.put("/:id/confirm-payment", async (req, res) => {
+  try {
+    const project = await Project.findByIdAndUpdate(
+      req.params.id,
+      { paymentConfirmedByEditor: true, status: "Paid", paymentStatus: "Done" },
+      { new: true }
+    );
+    res.send(project);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+// report/dispute project (editor)
+router.post("/:id/report", async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const project = await Project.findByIdAndUpdate(
+      req.params.id,
+      { isDisputed: true, disputeReason: reason },
+      { new: true }
+    );
+    res.send(project);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
 module.exports = router;

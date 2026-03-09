@@ -40,8 +40,21 @@ router.post("/stats", isAdmin, async (req, res) => {
             openProjects: await Project.countDocuments({ status: 'Open' }),
             inProgress: await Project.countDocuments({ status: 'In Progress' }),
             completed: await Project.countDocuments({ status: 'Completed' }),
-            paid: await Project.countDocuments({ status: 'Paid' })
+            paid: await Project.countDocuments({ status: 'Paid' }),
+            disputed: await Project.countDocuments({ isDisputed: true })
         });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+// Get all disputed projects
+router.post("/disputes", isAdmin, async (req, res) => {
+    try {
+        const projects = await Project.find({ isDisputed: true })
+            .populate('clientId', 'name email')
+            .populate('assignedTo', 'name email');
+        res.send(projects);
     } catch (error) {
         res.status(500).send(error);
     }

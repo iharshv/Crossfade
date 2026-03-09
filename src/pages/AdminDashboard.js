@@ -28,7 +28,7 @@ export default function AdminDashboard() {
 
     const fetchStats = useCallback(async () => {
         try {
-            const res = await fetch(`${API_URL}/admin/functions`, {
+            const res = await fetch(`${API_URL}/admin/stats`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ adminId: user?._id }),
@@ -227,6 +227,12 @@ export default function AdminDashboard() {
                                 } `}>
                             Projects ({projects.length})
                         </button>
+                        <button
+                            onClick={() => setActiveTab('disputes')}
+                            className={`px - 6 py - 3 font - medium transition - colors ${activeTab === 'disputes' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-400 hover:text-white'
+                                } `}>
+                            Disputes ({stats?.disputed || 0})
+                        </button>
                     </div>
 
                     {/* STATISTICS TAB */}
@@ -331,7 +337,36 @@ export default function AdminDashboard() {
                         </Card>
                     )}
 
-                    {/* USER MODAL */}
+                    {/* DISPUTES TAB */}
+                    {activeTab === 'disputes' && (
+                        <Card className="p-6 border-white/10 bg-black/40">
+                            <h2 className="text-2xl font-bold text-red-500 mb-6">Payment Disputes & Reports</h2>
+                            <div className="space-y-4">
+                                {projects.filter(p => p.isDisputed).length === 0 ? (
+                                    <p className="text-gray-500 italic">No active disputes.</p>
+                                ) : (
+                                    projects.filter(p => p.isDisputed).map(p => (
+                                        <Card key={p._id} className="p-4 border-red-500/20 bg-red-500/5">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white">{p.title}</h3>
+                                                    <p className="text-sm text-red-400 mt-2 font-medium">Reason: {p.disputeReason}</p>
+                                                    <div className="flex gap-4 mt-3 text-xs text-gray-400">
+                                                        <span>Client: {p.clientId?.name}</span>
+                                                        <span>Editor: {p.assignedTo?.name}</span>
+                                                        <span>Budget: ${p.budget}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-3">
+                                                    <Button onClick={() => openEditProject(p)} variant="outline" className="text-xs">Resolve</Button>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
+                            </div>
+                        </Card>
+                    )}
                     {showUserModal && (
                         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                             <Card className="w-full max-w-md p-6 bg-[#0a0a1a] border-white/10">
