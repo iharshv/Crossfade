@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+console.log("DEBUG: Connecting to Backend at:", API_URL);
 
 export default function Login() {
     const [formData, setFormData] = useState({ email: "", password: "" });
