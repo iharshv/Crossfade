@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API_URL from "../apiConfig";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +8,7 @@ import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 export default function Profile() {
     const { user, logout, updateUser } = useAuth();

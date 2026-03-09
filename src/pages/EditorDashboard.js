@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import API_URL from "../apiConfig";
 import Layout from "../components/Layout";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import Chat from "../components/Chat";
 import { useAuth } from "../context/AuthContext";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 export default function EditorDashboard() {
     const { user } = useAuth();

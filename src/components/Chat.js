@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import API_URL from "../apiConfig";
 import { useAuth } from "../context/AuthContext";
 import { io } from "socket.io-client";
 import Card from "./ui/Card";
 import Button from "./ui/Button";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const socket = io(API_URL);
 
 export default function Chat({ projectId, onClose }) {

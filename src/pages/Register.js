@@ -1,11 +1,12 @@
 import { useState } from "react";
+import API_URL from "../apiConfig";
 import Layout from "../components/Layout";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Link, useNavigate } from "react-router-dom";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 export default function Register() {
     const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "client" });
