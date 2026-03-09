@@ -59,6 +59,20 @@ export default function EditorDashboard() {
         }
     };
 
+    const handleFinish = async (projectId) => {
+        if (!window.confirm("Mark project as completed?")) return;
+        try {
+            await fetch(`${API_URL}/projects/${projectId}/status`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "Completed" }),
+            });
+            fetchMyProjects();
+        } catch (error) {
+            alert("Error updating status");
+        }
+    };
+
     const handleConfirmPayment = async (projectId) => {
         try {
             await fetch(`${API_URL}/projects/${projectId}/confirm-payment`, {
